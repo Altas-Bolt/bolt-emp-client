@@ -6,26 +6,28 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
 // Import Utils
 import { installSaltMinion } from 'utils/helperFunctions';
+import store from 'store/store';
 
 interface IProps {
-  status: 'loading' | 'error' | 'success' | 'idle';
+  status: 'loading' | 'error' | 'installed' | 'configured' | 'idle' | 'success';
   setStatus: React.Dispatch<
-    React.SetStateAction<'loading' | 'error' | 'success' | 'idle'>
+    React.SetStateAction<
+      'loading' | 'error' | 'installed' | 'configured' | 'idle' | 'success'
+    >
   >;
 }
 
 const InstallationModal: React.FC<IProps> = ({ status, setStatus }) => {
   const [loading, setLoading] = useState(false);
-  const [password, setPassword] = useState(localStorage.getItem('pwd') || '');
-  const navigate = useNavigate();
+  const [password, setPassword] = useState(store.get('password') || '');
 
   const handleOk = async () => {
     try {
       setLoading(true);
-      localStorage.setItem('pwd', password);
+      store.set('password', password);
       await installSaltMinion();
       message.success('Installed successfully');
-      navigate('/dashboard');
+      setStatus('installed');
     } catch (error: any) {
       message.error('Failed to Install');
     } finally {
