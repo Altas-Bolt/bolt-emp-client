@@ -27,7 +27,7 @@ const Home = () => {
   const checkInstallation = async () => {
     const isInstalled = await isSaltMinionInstalled();
     const isMinionConfigured = await isSaltMinionConfigured();
-    // if (isInstalled && isMinionConfigured) navigate('/dashboard');
+    if (isInstalled && isMinionConfigured) navigate('/dashboard');
 
     setCheckCompleted(true);
   };

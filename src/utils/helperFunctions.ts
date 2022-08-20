@@ -103,10 +103,12 @@ export const installSaltMinion = async () => {
 };
 
 export const isSaltMinionConfigured = async () => {
+  const pwd = store.get('password');
+  if (!pwd) return false;
   try {
     const isMasterInFile = await executeSudoCMDAsync(
       "sudo -S cat /etc/salt/minion | grep '^master:'",
-      'rishabh1824/'
+      pwd
     );
     return !!isMasterInFile;
   } catch (err) {
@@ -122,12 +124,12 @@ export const writeMinionId = async (minionId: string) => {
   try {
     out = await executeSudoCMDAsync(
       "sudo -S cat /etc/salt/minion | grep -n '^id:'",
-      'rishabh1824/'
+      pwd
     );
     if (!out) {
       out = await executeSudoCMDAsync(
         "sudo -S cat /etc/salt/minion | grep -n '^#id:'",
-        'rishabh1824/'
+        pwd
       );
     }
   } catch (err) {
@@ -140,12 +142,12 @@ export const writeMinionId = async (minionId: string) => {
     }
     await executeSudoCMDAsync(
       `sudo -S sed -i '${linenumber}s/.*/id: ${minionId}/' /etc/salt/minion`,
-      'rishabh1824/'
+      pwd
     );
   } else {
     await executeSudoCMDAsync(
       `sudo -S sh -c "echo 'id: ${minionId}' >> /etc/salt/minion"`,
-      'rishabh1824/'
+      pwd
     );
   }
 };
@@ -157,13 +159,13 @@ export const writeMasterIp = async (masterIp: string) => {
   try {
     out = await executeSudoCMDAsync(
       "sudo -S cat /etc/salt/minion | grep -n '^master:'",
-      'rishabh1824/'
+      pwd
     );
 
     if (!out) {
       out = await executeSudoCMDAsync(
         "sudo -S cat /etc/salt/minion | grep -n '^#master:'",
-        'rishabh1824/'
+        pwd
       );
     }
   } catch (err) {
@@ -176,12 +178,12 @@ export const writeMasterIp = async (masterIp: string) => {
     }
     await executeSudoCMDAsync(
       `sudo -S sed -i '${linenumber}s/.*/master: ${masterIp}/' /etc/salt/minion`,
-      'rishabh1824/'
+      pwd
     );
   } else {
     await executeSudoCMDAsync(
       `sudo -S sh -c "echo 'master: ${masterIp}' >> /etc/salt/minion"`,
-      'rishabh1824/'
+      pwd
     );
   }
 };
