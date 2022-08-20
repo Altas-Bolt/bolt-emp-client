@@ -27,7 +27,10 @@ const Home = () => {
   const checkInstallation = async () => {
     const isInstalled = await isSaltMinionInstalled();
     const isMinionConfigured = await isSaltMinionConfigured();
-    if (isInstalled && isMinionConfigured) navigate('/dashboard');
+    if (isInstalled && isMinionConfigured) {
+      console.log('navigate');
+      navigate('/dashboard');
+    }
 
     setCheckCompleted(true);
   };
@@ -38,7 +41,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    if (status === 'success') navigate('/dashboard');
+    if (status === 'configured') navigate('/dashboard');
   }, [status]);
 
   const handleGetStarted = async () => {
