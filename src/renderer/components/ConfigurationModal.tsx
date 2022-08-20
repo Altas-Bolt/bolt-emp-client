@@ -34,6 +34,7 @@ const ConfiguarionModal: React.FC<IProps> = ({ status, setStatus }) => {
       setStatus('configured');
     } catch (error: any) {
       message.error('Failed to configure');
+      console.log(error);
     } finally {
       setLoading(false);
     }

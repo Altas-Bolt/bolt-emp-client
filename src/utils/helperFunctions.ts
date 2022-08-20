@@ -103,24 +103,35 @@ export const installSaltMinion = async () => {
 };
 
 export const isSaltMinionConfigured = async () => {
-  const isMasterInFile = await executeCMDAsync(
-    "sudo cat /etc/salt/minion | grep '^master:'"
-  );
-  return isMasterInFile;
+  try {
+    const isMasterInFile = await executeSudoCMDAsync(
+      "sudo -S cat /etc/salt/minion | grep '^master:'",
+      'rishabh1824/'
+    );
+    return !!isMasterInFile;
+  } catch (err) {
+    console.log('err', err);
+    return false;
+  }
 };
 
 export const writeMinionId = async (minionId: string) => {
   const pwd = store.get('password');
   let linenumber = '';
-  let out = await executeSudoCMDAsync(
-    "sudo -S cat /etc/salt/minion | grep -n '^id:'",
-    pwd
-  );
-  if (!out) {
+  let out;
+  try {
     out = await executeSudoCMDAsync(
-      "sudo -S cat /etc/salt/minion | grep -n '^#id:'",
-      pwd
+      "sudo -S cat /etc/salt/minion | grep -n '^id:'",
+      'rishabh1824/'
     );
+    if (!out) {
+      out = await executeSudoCMDAsync(
+        "sudo -S cat /etc/salt/minion | grep -n '^#id:'",
+        'rishabh1824/'
+      );
+    }
+  } catch (err) {
+    console.log(err);
   }
   if (out) {
     for (let i = 0; i < out.length; i += 1) {
@@ -129,12 +140,12 @@ export const writeMinionId = async (minionId: string) => {
     }
     await executeSudoCMDAsync(
       `sudo -S sed -i '${linenumber}s/.*/id: ${minionId}/' /etc/salt/minion`,
-      pwd
+      'rishabh1824/'
     );
   } else {
     await executeSudoCMDAsync(
-      `sudo sh -c "echo 'id: ${minionId}' >> /etc/salt/minion"'`,
-      pwd
+      `sudo -S sh -c "echo 'id: ${minionId}' >> /etc/salt/minion"`,
+      'rishabh1824/'
     );
   }
 };
@@ -142,15 +153,21 @@ export const writeMinionId = async (minionId: string) => {
 export const writeMasterIp = async (masterIp: string) => {
   const pwd = store.get('password');
   let linenumber = '';
-  let out = await executeSudoCMDAsync(
-    "sudo -S cat /etc/salt/minion | grep -n '^master:'",
-    pwd
-  );
-  if (!out) {
+  let out;
+  try {
     out = await executeSudoCMDAsync(
-      "sudo -S cat /etc/salt/minion | grep -n '^#master:'",
-      pwd
+      "sudo -S cat /etc/salt/minion | grep -n '^master:'",
+      'rishabh1824/'
     );
+
+    if (!out) {
+      out = await executeSudoCMDAsync(
+        "sudo -S cat /etc/salt/minion | grep -n '^#master:'",
+        'rishabh1824/'
+      );
+    }
+  } catch (err) {
+    console.log('err', err);
   }
   if (out) {
     for (let i = 0; i < out.length; i += 1) {
@@ -159,12 +176,12 @@ export const writeMasterIp = async (masterIp: string) => {
     }
     await executeSudoCMDAsync(
       `sudo -S sed -i '${linenumber}s/.*/master: ${masterIp}/' /etc/salt/minion`,
-      pwd
+      'rishabh1824/'
     );
   } else {
     await executeSudoCMDAsync(
-      `sudo sh -c "echo 'master: ${masterIp}' >> /etc/salt/minion"'`,
-      pwd
+      `sudo -S sh -c "echo 'master: ${masterIp}' >> /etc/salt/minion"`,
+      'rishabh1824/'
     );
   }
 };
