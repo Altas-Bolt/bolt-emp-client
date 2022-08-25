@@ -1,6 +1,8 @@
 import { Menu } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getIpAddress } from 'utils/helperFunctions';
+import { NavbarStylesLayout } from './navbar.styles';
 
 const navItems = [
   {
@@ -21,15 +23,9 @@ const Navbar: React.FC = ({}) => {
   const navigate = useNavigate();
 
   return (
-    <Menu
-      onClick={(item) => {
-        navigate(item.key);
-      }}
-      theme="dark"
-      mode="horizontal"
-      defaultSelectedKeys={['2']}
-      items={navItems}
-    />
+    <NavbarStylesLayout>
+      <p className="ip-text">The IP of this device is {getIpAddress()}</p>{' '}
+    </NavbarStylesLayout>
   );
 };
 

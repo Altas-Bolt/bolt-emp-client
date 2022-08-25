@@ -31,7 +31,6 @@ const Home = () => {
       console.log('navigate');
       navigate('/dashboard');
     }
-
     setCheckCompleted(true);
   };
 

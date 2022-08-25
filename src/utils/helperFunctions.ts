@@ -2,10 +2,15 @@ import { exec } from 'child_process';
 import { readFile } from 'fs/promises';
 import os from 'os';
 import store from 'store/store';
+import ip from 'ip';
 
 export const isMac = () => os.platform() === 'darwin';
 
 export const isLinux = () => os.platform() === 'linux';
+
+export const getIpAddress = () => {
+  return ip.address();
+};
 
 const executeCMDAsync = (cmd: string): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -186,4 +191,9 @@ export const writeMasterIp = async (masterIp: string) => {
       pwd
     );
   }
+};
+
+export const restartMinion = async () => {
+  const pwd = store.get('password');
+  await executeSudoCMDAsync(`sudo -S service salt-minion restart`, pwd);
 };

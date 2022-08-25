@@ -7,6 +7,7 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 // Import Utils
 import {
   installSaltMinion,
+  restartMinion,
   writeMasterIp,
   writeMinionId,
 } from 'utils/helperFunctions';
@@ -31,6 +32,7 @@ const ConfiguarionModal: React.FC<IProps> = ({ status, setStatus }) => {
       setLoading(true);
       await writeMinionId(minionId);
       await writeMasterIp(masterIp);
+      await restartMinion();
       setStatus('configured');
     } catch (error: any) {
       message.error('Failed to configure');
