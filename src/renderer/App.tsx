@@ -19,7 +19,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Dashboardlayout />} />
+        <Route path="/" element={<Home />} />
         <Route path="/newminion" element={<NewMinion />} />
         <Route path="/dashboard" element={<Dashboardlayout />} />
       </Routes>
