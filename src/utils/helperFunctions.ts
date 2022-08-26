@@ -197,3 +197,5 @@ export const restartMinion = async () => {
   const pwd = store.get('password');
   await executeSudoCMDAsync(`sudo -S service salt-minion restart`, pwd);
 };
+    
+export const isWindows = () => process.platform.toLowerCase().includes('win');

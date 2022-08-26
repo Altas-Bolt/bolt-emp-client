@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   isSaltMinionConfigured,
   isSaltMinionInstalled,
+  isWindows,
 } from 'utils/helperFunctions';
 
 // Import Components
@@ -35,6 +36,11 @@ const Home = () => {
   };
 
   useEffect(() => {
+            // console.log();
+            if (isWindows() === true) {
+              navigate('/dashboard');
+              return;
+            }
     checkInstallation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
